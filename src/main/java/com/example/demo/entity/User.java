@@ -8,8 +8,15 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "user", uniqueConstraints = {
+	    @UniqueConstraint(columnNames = "username"),
+	    @UniqueConstraint(columnNames = "emailid"),
+	    @UniqueConstraint(columnNames = "phone")
+	})
 public class User {
 	
 	 @Id

@@ -11,6 +11,7 @@ import com.example.demo.dto.vendorsignupdto.VendorSignupDTO;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.jwtutl.JwtUtil;
+import com.example.demo.repo.UserRepository;
 import com.example.demo.service.OtpService;
 import com.example.demo.service.UserService;
 
@@ -52,6 +53,8 @@ public class UserController {
 	@Autowired
     private PasswordEncoder passwordEncoder;
 	
+	@Autowired
+	private UserRepository userrepo;
 	
 	
 	@PostMapping("/check-user")
@@ -111,16 +114,35 @@ public class UserController {
 	@PostMapping("/signup")
 	
 	public ResponseEntity<?> userSignUp(@RequestBody RegisterDTO registerdto){
-		
-		User user = new User();
-        System.out.println("regs user"+registerdto.getUsername());
-		user.setUsername(registerdto.getUsername());
-		user.setEmailid(registerdto.getEmail());
-		user.setPassword(passwordEncoder.encode(registerdto.getPassword()));
-		user.setRole(Role.USER);
-		userservice.saveUser(user);
+//		
+//		 if (userrepo.existsByUsername(dto.getUsername())) {
+//		        throw new RuntimeException("Username already taken");
+//		    }
+		   
 		  
-		  return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "User created successfully"));
+		  try {
+			  if (userrepo.existsByEmailid(registerdto.getEmail())) {
+			        throw new RuntimeException("Email already registered");
+			    }
+			    if (userrepo.existsByPhone(registerdto.getPhone())) {
+			        throw new RuntimeException("Phone number already registered");
+			    }
+			
+			User user = new User(); 
+	        System.out.println("regs user"+registerdto.getPhone());
+			user.setUsername(registerdto.getUsername());
+			user.setEmailid(registerdto.getEmail());
+			user.setPhone(registerdto.getPhone());
+			user.setPassword(passwordEncoder.encode(registerdto.getPassword()));
+			user.setRole(Role.USER);
+			userservice.saveUser(user);
+			  
+			  return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "User created successfully"));	
+			
+		    } catch (RuntimeException e) {
+		        return ResponseEntity.status(HttpStatus.CONFLICT)
+		                .body(Map.of("error", e.getMessage()));
+		    }
 	}
 	
 	
