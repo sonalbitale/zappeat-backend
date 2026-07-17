@@ -54,6 +54,7 @@ public class Order {
 	@JoinColumn(name = "restaurant_id")
 	private Restaurant restaurant;
 	
+	
 	public  Order() {
 		this.orderdate= LocalDateTime.now();
 		this.orderstatus=OrderStatus.PLACED;
@@ -68,7 +69,12 @@ public class Order {
 	private String paymentMethod;
 	
 	private String rejectionReason;
-	private Long deliveryBoyId; // null initially
+	
+	@ManyToOne
+	@JoinColumn(name = "delivery_boy_id")
+	private User deliveryBoy;
+	
+
 
 	
 	
@@ -160,13 +166,6 @@ public class Order {
 		this.rejectionReason = rejectionReason;
 	}
 
-	public Long getDeliveryBoyId() {
-		return deliveryBoyId;
-	}
-
-	public void setDeliveryBoyId(Long deliveryBoyId) {
-		this.deliveryBoyId = deliveryBoyId;
-	}
 
 	public LocalDateTime getAssignedAt() {
 		return assignedAt;
@@ -174,6 +173,14 @@ public class Order {
 
 	public void setAssignedAt(LocalDateTime assignedAt) {
 		this.assignedAt = assignedAt;
+	}
+
+	public User getDeliveryBoy() {
+		return deliveryBoy;
+	}
+
+	public void setDeliveryBoy(User deliveryBoy) {
+		this.deliveryBoy = deliveryBoy;
 	}
 	
 	

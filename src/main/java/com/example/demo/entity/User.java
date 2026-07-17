@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "user", uniqueConstraints = {
-	    @UniqueConstraint(columnNames = "username"),
+	    
 	    @UniqueConstraint(columnNames = "emailid"),
 	    @UniqueConstraint(columnNames = "phone")
 	})

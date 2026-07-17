@@ -231,6 +231,7 @@ public class OrderServiceImpl implements OrderService{
 		
 		placedorderresponse.setDeliveryaddress(addressdto);// in convertToResponseDTO
 		placedorderresponse.setRestaurantName(order.getRestaurant().getRestaurantName());
+		placedorderresponse.setDeliveryBoy(order.getDeliveryBoy());
 		
 		 
 		 
@@ -338,14 +339,15 @@ public class OrderServiceImpl implements OrderService{
 
 	     // 🔥 SAFETY CHECK
 	     if (order.getOrderstatus() != OrderStatus.READY_FOR_PICKUP 
-	         || order.getDeliveryBoyId() != null) {
+	         || order.getDeliveryBoy() != null) {
 
 	         throw new RuntimeException("Order already taken");
 	     }
 
 	     // ✅ Assign
-	     order.setDeliveryBoyId(user.getId());
+	     order.setDeliveryBoy(user);
 	     order.setOrderstatus(OrderStatus.ASSIGNED);
+//	     order.setDeliveryBoy(user);
 	     order.setAssignedAt(LocalDateTime.now());
 
 	     Order savedOrder = orderrepo.save(order);
@@ -388,7 +390,7 @@ public class OrderServiceImpl implements OrderService{
 	         .orElseThrow(() -> new RuntimeException("Order not found"));
 
 	     if (order.getOrderstatus() != OrderStatus.ASSIGNED
-	         || !order.getDeliveryBoyId().equals(user.getId())) {
+	         || !order.getDeliveryBoy().equals(user.getId())) {
 	         throw new RuntimeException("Order cannot be picked up");
 	     }
 
@@ -409,7 +411,7 @@ public class OrderServiceImpl implements OrderService{
 	         .orElseThrow(() -> new RuntimeException("Order not found"));
 
 	     if (order.getOrderstatus() != OrderStatus.OUT_FOR_DELIVERY
-	         || !order.getDeliveryBoyId().equals(user.getId())) {
+	         || !order.getDeliveryBoy().equals(user.getId())) {
 	         throw new RuntimeException("Order cannot be marked delivered");
 	     }
 

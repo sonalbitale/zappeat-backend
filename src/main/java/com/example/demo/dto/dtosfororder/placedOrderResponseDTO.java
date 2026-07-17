@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.demo.entity.User;
+
 public class placedOrderResponseDTO {
 	private Long orderid;
 	private String status;
@@ -11,6 +13,8 @@ public class placedOrderResponseDTO {
 	private LocalDateTime date;
 	private AddressDTO deliveryaddress;
     private String paymentMethod;
+    
+    private User deliveryBoy;
  // in placedOrderResponseDTO
     private String restaurantName;
 
@@ -66,6 +70,13 @@ public class placedOrderResponseDTO {
 	public void setRestaurantName(String restaurantName) {
 		this.restaurantName = restaurantName;
 	}
+	public User getDeliveryBoy() {
+		return deliveryBoy;
+	}
+	public void setDeliveryBoy(User deliveryBoy) {
+		this.deliveryBoy = deliveryBoy;
+	}
+	
 	
 	
 	
